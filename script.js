@@ -10,12 +10,49 @@
 
 var formValidity = true;
 
+// function to validate required input fields
+function validateRequired() {
+    var inputElements = document.getElementsByTagName("input");
+    var errorDiv = document.getElementById("errorText");
+    var fieldsetValidity = true;
+    var elementCount = inputElements.length;
+    var currentElement = null;
+    try {
+        for (let i = 0; i < elementCount; i++) {
+            currentElement = inputElements[i];
+            if (currentElement.value === "") {
+                currentElement.style.background = "rgb(255,233,233)";
+                fieldsetValidity = false;
+            } else {
+                currentElement.style.background = "white";
+            }
+        }
+        if (fieldsetValidity) {
+            errorDiv.style.display = "none";
+            errorDiv.innerHTML = "";
+        } else {
+            throw "Please fill out all Personal Information.";
+        }
+    } catch (msg) {
+        errorDiv.style.display = "block";
+        errorDiv.innerHTML = msg;
+        formValidity = false;
+    }
+}
+
 // function to validate form
 function validateForm(evt) {
+    formValidity = true;
     if (evt.preventDefault) {
         evt.preventDefault();
     } else {
         evt.returnValue = false;
+    }
+    
+    validateRequired();
+
+    if (formValidity) {
+        document.getElementsByTagName("form")[0].submit();
     }
 }
 
